@@ -28,3 +28,13 @@ def clean(rulestext):
         out.append(line)
 
     return '\n'.join(out) + '\n'
+
+
+def main():
+    import subprocess
+    rulestext = subprocess.check_output(['iptables-save'])
+    print clean(rulestext),
+
+
+if __name__ == '__main__':
+    main()
