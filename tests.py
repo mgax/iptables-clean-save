@@ -11,3 +11,18 @@ def test_remove_comments():
 def test_remove_counters():
     rulestext = ":FORWARD ACCEPT [100:200]\n"
     assert clean(rulestext) == ":FORWARD ACCEPT\n"
+
+
+def test_remove_automatic_modules():
+    rulestext = (
+        '-A INPUT -p icmp -m icmp --icmp-type 8 '
+                '-m comment --comment "foo" -j ACCEPT\n'
+        '-A INPUT -p udp -m udp --dport 10604 '
+                '-m comment --comment "bar" -j ACCEPT\n'
+        '-A INPUT -p tcp -m tcp --dport 28410 '
+                '-m comment --comment "baz" -j ACCEPT\n')
+    expected_output = (
+        '-A INPUT -p icmp --icmp-type 8 -m comment --comment "foo" -j ACCEPT\n'
+        '-A INPUT -p udp --dport 10604 -m comment --comment "bar" -j ACCEPT\n'
+        '-A INPUT -p tcp --dport 28410 -m comment --comment "baz" -j ACCEPT\n')
+    assert clean(rulestext) == expected_output
