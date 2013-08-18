@@ -26,3 +26,16 @@ def test_remove_automatic_modules():
         '-A INPUT -p udp --dport 10604 -m comment --comment "bar" -j ACCEPT\n'
         '-A INPUT -p tcp --dport 28410 -m comment --comment "baz" -j ACCEPT\n')
     assert clean(rulestext) == expected_output
+
+
+def test_insert_blank_line_between_tables():
+    rulestext = ('*nat\n'
+                 '-A PREROUTING blah blah\n'
+                 '*filter\n'
+                 '-A INPUT blah blah\n')
+    expected_output = ('*nat\n'
+                       '-A PREROUTING blah blah\n'
+                       '\n'
+                       '*filter\n'
+                       '-A INPUT blah blah\n')
+    assert clean(rulestext) == expected_output

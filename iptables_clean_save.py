@@ -4,6 +4,8 @@ import re
 
 comment = re.compile(r'^\s*#')
 
+table = re.compile(r'^\*')
+
 chain = re.compile(r'^:(?P<name>\S+)\s+'
                    r'(?P<default>\S+)\s+'
                    r'(?P<counters>\[\d+:\d+\])\s*')
@@ -19,6 +21,9 @@ def clean(rulestext):
     for line in rulestext.splitlines():
         if comment.search(line):
             continue
+
+        if table.search(line) and len(out) > 0:
+            out.append('')
 
         if chain.search(line):
             line = re.sub(r'\s+\[\d+:\d+\]', '', line)
