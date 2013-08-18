@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import re
 
 comment = re.compile(r'^\s*#')
